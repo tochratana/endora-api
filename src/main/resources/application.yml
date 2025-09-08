@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: api
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/product_db
+    username: tochratana
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+  threads:
+    virtual:
+      enabled: true
+logging:
+  level:
+    com.example: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.scheduling: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+task-api:
+  limits:
+    max-tasks-per-day: 100
+  cleanup:
+    enabled: true
+    cron: "0 0 0 * * ?" # Daily at midnight
+    keep-task-counters-days: 7
+
+
+
+# Server Port
+server:
+  port: 8080
+
+# Swagger/OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    try-it-out-enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+    display-request-duration: true
+    show-actuator: false
+  show-actuator: false
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
