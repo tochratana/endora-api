@@ -3,12 +3,12 @@ spring:
     name: api
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/product_db
+    url: jdbc:postgresql://dpg-d3qrb9ili9vc73cjj9k0-a.oregon-postgres.render.com:5432/freeapidb
     username: tochratana
-    password: 123
+    password: kZex0dh5WqMmtcaisaDf3i2SIsdp4aP2
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
