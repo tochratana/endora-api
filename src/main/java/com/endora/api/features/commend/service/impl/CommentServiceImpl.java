@@ -7,6 +7,8 @@ import com.endora.api.features.commend.model.Comment;
 import com.endora.api.features.commend.repository.CommentRepository;
 import com.endora.api.features.commend.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,11 +46,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CommentResponse> getAllComments() {
-        return commentRepository.findAllOrderByCreatedAtDesc()
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+    public Page<CommentResponse> getAllComments(Pageable pageable) {
+        return commentRepository.findAll(pageable)
+                .map(this::mapToResponse);
     }
 
     @Override

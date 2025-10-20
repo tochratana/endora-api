@@ -6,15 +6,20 @@ import com.endora.api.features.commend.dto.CommentUpdateRequest;
 import com.endora.api.features.commend.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/comments")
+@RequestMapping("/comments")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -28,8 +33,30 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CommentResponse>> getAllComments() {
-        List<CommentResponse> comments = commentService.getAllComments();
+    public ResponseEntity<Page<CommentResponse>> getAllComments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String[] sort) {
+
+        // Parse sort parameters
+        List<Sort.Order> orders = new ArrayList<>();
+
+        if (sort[0].contains(",")) {
+            for (String sortOrder : sort) {
+                String[] parts = sortOrder.split(",");
+                String property = parts[0];
+                Sort.Direction direction = parts.length > 1 && parts[1].equalsIgnoreCase("desc")
+                        ? Sort.Direction.DESC
+                        : Sort.Direction.ASC;
+                orders.add(new Sort.Order(direction, property));
+            }
+        } else {
+            orders.add(new Sort.Order(Sort.Direction.DESC, sort[0]));
+        }
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
+        Page<CommentResponse> comments = commentService.getAllComments(pageable);
+
         return ResponseEntity.ok(comments);
     }
 

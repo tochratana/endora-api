@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/products")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class ProductController {
@@ -85,6 +85,8 @@ public class ProductController {
         productService.deleteProduct(id);
         return ResponseEntity.ok(ApiResponse.success("Product deleted successfully", null));
     }
+
+    // Not input in api
 
     @GetMapping("/info")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getDatabaseInfo() {

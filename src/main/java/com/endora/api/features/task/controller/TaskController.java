@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/tasks")
+@RequestMapping("/tasks")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class TaskController {
@@ -39,19 +39,32 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskDto.TaskResponse>> getAllTasks(
-            @RequestParam(required = false) TaskStatus status,
-            @RequestParam(required = false) String search) {
+    public ResponseEntity<Page<TaskDto.TaskResponse>> getAllTasks(
+//            @RequestParam(required = false) TaskStatus status,
+//            @RequestParam(required = false) String search) {
+//
+//        List<TaskDto.TaskResponse> responses;
+//
+//        if (status != null) {
+//            responses = taskService.getTasksByStatus(status);
+//        } else if (search != null && !search.trim().isEmpty()) {
+//            responses = taskService.searchTasks(search);
+//        } else {
+//            responses = taskService.getAllTasks();
+//        }
+//
+//        return ResponseEntity.ok(responses);
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir) {
 
-        List<TaskDto.TaskResponse> responses;
+        Sort sort = sortDir.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
 
-        if (status != null) {
-            responses = taskService.getTasksByStatus(status);
-        } else if (search != null && !search.trim().isEmpty()) {
-            responses = taskService.searchTasks(search);
-        } else {
-            responses = taskService.getAllTasks();
-        }
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<TaskDto.TaskResponse> responses = taskService.getAllTasks(pageable);
 
         return ResponseEntity.ok(responses);
     }

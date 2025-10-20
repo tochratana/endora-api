@@ -4,7 +4,10 @@ import com.endora.api.features.post.dto.CreatePostDTO;
 import com.endora.api.features.post.dto.PostResponseDTO;
 import com.endora.api.features.post.dto.PostSummaryDTO;
 import com.endora.api.features.post.dto.UpdatePostDTO;
+import org.springframework.data.domain.Page;
 
+
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface PostService {
@@ -12,7 +15,7 @@ public interface PostService {
     // CRUD Operations
     PostResponseDTO createPost(CreatePostDTO createPostDTO);
 
-    List<PostSummaryDTO> getAllPosts();
+    Page<PostSummaryDTO> getAllPosts(Pageable pageable);
 
     PostResponseDTO getPostById(Long id);
 
